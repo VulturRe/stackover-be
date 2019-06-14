@@ -1,0 +1,25 @@
+version: '3'
+services:
+  stackover-be:
+    container_name: stackover-be
+    build:
+      context: ../
+      dockerfile: ./Dockerfile.production
+      args:
+        port: ${PORT}
+    env_file:
+      - ../.env
+    restart: always
+    ports:
+      - "${PORT}:${PORT}"
+    links: mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ".${MONGO_DATA_DIR}:${MONGO_DATA_DIR}"
+    ports:
+      - "27017:27017"
+    env_file:
+      - ../.env
+    command: "mongod --smallfiles --logpath=${MONGO_LOG_FILE}"
