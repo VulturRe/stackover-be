@@ -1,0 +1,19 @@
+{
+  "name": "stackover-be",
+  "version": "1.0.0",
+  "description": "Stackoverflow search BackEnd",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/VulturRe/piano-task-be.git"
+  },
+  "author": "Ilshat Galimov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VulturRe/piano-task-be/issues"
+  },
+  "homepage": "https://github.com/VulturRe/piano-task-be#readme"
+}
