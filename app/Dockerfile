@@ -3,7 +3,6 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY package.json ./
 RUN npm install --only=production
-ENV NODE_ENV prod
 COPY . ./
 ARG port=3000
 EXPOSE $port
