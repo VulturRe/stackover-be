@@ -4,6 +4,7 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('./app/config/database');
 const userRouter = require('./app/routes/user');
+const errorHandler = require('./app/api/middleware/errorHandler.middleware');
 const fs = require('fs');
 const app = express();
 
@@ -24,7 +25,7 @@ app.get('/', checkIfAuthenticated, function (req, res) {
   res.status(200).json({ stackover: 'test', env: process.env.NODE_ENV });
 });
 
-app.use('/api/user', userRouter);
+app.use('/api/user', userRouter, errorHandler.bind(null, 'User'));
 
 app.listen(3000, function () {
   console.log('Node server listening on port 3000')

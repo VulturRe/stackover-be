@@ -9,3 +9,4 @@ example.env
 .travis.yml
 docker/
 .idea/
+.vscode/

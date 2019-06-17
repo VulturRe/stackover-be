@@ -14,7 +14,8 @@ services:
     restart: always
     ports:
       - "${PORT}:${PORT}"
-    links: mongo
+    links: 
+      - mongo
   mongo:
     container_name: mongo
     build:
