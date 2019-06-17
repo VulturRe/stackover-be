@@ -1,12 +1,16 @@
 function errorHandler(modelName, err, req, res, next) {
   switch (err.name) {
+    case 'WrongParams': 
+      res.status(400).send(err.message);
+      break;
     case 'MongoError':
       handleMongoErrors(modelName, err.message, req, res, next);
       break;
     case 'ValidationError':
       res.status(400).json({ name: 'ValidationError', message: err.message });
+      break;
     default:
-      res.sendStatus(500);
+      res.status(500).json(err);
       break;
   }
   next();
@@ -23,7 +27,7 @@ function handleMongoErrors(modelName, err, req, res, next) {
       break;
     }
     default:
-      res.status(400).json({ name: 'MongoError', message: err.errmsg });
+      res.status(500).json({ name: 'MongoError', message: err.errmsg });
       break;
   }
   next();
