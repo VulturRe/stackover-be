@@ -1,4 +1,5 @@
 function errorHandler(modelName, err, req, res, next) {
+  console.log(err);
   switch (err.name) {
     case 'WrongParams': 
       res.status(400).send(err.message);

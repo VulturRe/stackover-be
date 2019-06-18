@@ -12,12 +12,11 @@ const transporter = nodemailer.createTransport({
 });
 
 class Mailer {
-  static async send(to, subject, text, html) {
+  static async sendHtml(to, subject, html) {
     const mailOptions = {
       from: '"Piano FE task" <piano.fe.test@gmail.com>',
       to,
       subject,
-      text,
       html
     };
 

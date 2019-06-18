@@ -1,8 +1,5 @@
 const userService = require('../services/user.service');
 const restoreTokenService = require('../services/restoreToken.service');
-const mailer = require('../services/mailer.service');
-const moment = require('moment');
-const uuid = require('uuid/v4');
 
 module.exports = {
   create: async (req, res, next) => {
@@ -24,20 +21,24 @@ module.exports = {
   },
   restoreBegin: async (req, res, next) => {
     try {
-      const user = await userService.findByLogin(req.body.login);
-      const foundToken = await restoreTokenService.findByUserId(user.id);
-      if (foundToken) {
-        await mailer.send(user.email, 'Восстановление пароля', foundToken.token);
-      } else {
-        const token = {
-          userId: user.id,
-          token: uuid(),
-          expiresAt: moment().add(1, 'h').valueOf()
-        };
-        await restoreTokenService.create(token);
-        await mailer.send(user.email, 'Восстановление пароля', token.token);
-      }
+      await userService.restoreBegin(req.body.login);
       res.sendStatus(200);
+    } catch (err) {
+      next(err);
+    }
+  },
+  restoreEnd: async (req, res, next) => {
+    try {
+      await userService.restoreEnd(req.body.token, req.body.password);
+      res.sendStatus(200);
+    } catch (err) {
+      next(err);
+    }
+  },
+  checkRestoreToken: async (req, res, next) => {
+    try {
+      const token = await restoreTokenService.findByToken(req.body.token);
+      token ? res.status(200).send(true) : res.status(200).send(false);
     } catch (err) {
       next(err);
     }

@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('./app/config/database');
 const userRouter = require('./app/routes/user');
 const errorHandler = require('./app/api/middleware/errorHandler.middleware');
+const restoreTokenService = require('./app/api/services/restoreToken.service');
 const fs = require('fs');
 const app = express();
 
@@ -14,8 +15,6 @@ const checkIfAuthenticated = expressJwt({
   secret: RSA_PUBLIC_KEY,
   algorithms: ['RS256']
 });
-
-app.set('secretKey', 'stackover-be-secret');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -30,3 +29,9 @@ app.use('/api/user', userRouter, errorHandler.bind(null, 'User'));
 app.listen(3000, function () {
   console.log('Node server listening on port 3000')
 });
+
+// Clean expired restore password tokens
+setInterval(() => {
+  console.log('RestoreToken clean start');
+  restoreTokenService.clean().then(() => console.log('RestoreToken clean end'));
+}, 5 * 60 * 1000);

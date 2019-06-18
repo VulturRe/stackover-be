@@ -1,5 +1,6 @@
 const Validator = require('fastest-validator');
 const restoreTokenDao = require('../dao/restoreToken.dao');
+const moment = require('moment');
 const tokenValidator = new Validator();
 
 const tokenVSchema = {
@@ -25,25 +26,74 @@ class RestoreTokenService {
     }
 
     return new Promise((resolve, reject) => {
-      restoreTokenDao.create(token, async (err, res) => {
+      restoreTokenDao.create(token, (err, res) => {
         if (err) {
           reject({ name: 'MongoError', message: err });
         } else {
           resolve(res);
         }
-      })
-    })
+      });
+    });
   }
 
   static async findByUserId(userId) {
     return new Promise((resolve, reject) => {
-      restoreTokenDao.findOne({ userId }, async (err, res) => {
+      restoreTokenDao.findOne({ userId }, (err, res) => {
         if (err) {
           reject({ name: 'MongoError', message: err });
         } else {
           resolve(res);
         }
+      });
+    });
+  }
+
+  static async findByToken(token) {
+    return new Promise((resolve, reject) => {
+      restoreTokenDao.findOne({ token }, (err, res) => {
+        if (err) {
+          reject({ name: 'MongoError', message: err });
+        } else {
+          resolve(res);
+        }
+      });
+    });
+  }
+
+  static async findByTokenAndVerify(token) {
+    return RestoreTokenService.findByToken(token)
+      .then(token => {
+        if (!token) return false;
+        const now = moment();
+        const expiresAt = moment(token.expiresAt);
+        if (expiresAt.isSameOrBefore(now)) {
+          return false;
+        }
+        return token;
       })
+  }
+  
+  static async deleteByToken(token) {
+    return new Promise((resolve, reject) => {
+      restoreTokenDao.deleteOne({ token }, err => {
+        if (err) {
+          reject({ name: 'MongoError', message: err });
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  static async clean() {
+    return new Promise((resolve, reject) => {
+      restoreTokenDao.deleteMany({ expiresAt: { $lt: moment() } }, err => {
+        if (err) {
+          reject({ name: 'MongoError', message: err });
+        } else {
+          resolve();
+        }
+      });
     });
   }
 }

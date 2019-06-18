@@ -13,6 +13,8 @@ const checkIfAuthenticated = expressJwt({
 
 router.post('/register', userController.create);
 router.post('/auth', userController.authenticate);
-router.post('/restore-begin', checkIfAuthenticated, userController.restoreBegin);
+router.post('/check-token', userController.checkRestoreToken);
+router.post('/restore-begin', userController.restoreBegin);
+router.post('/restore-end', userController.restoreEnd);
 
 module.exports = router;
