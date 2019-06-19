@@ -3,7 +3,8 @@ const expressJwt = require('express-jwt');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('./app/config/database');
-const userRouter = require('./app/routes/user');
+const userRouter = require('./app/routes/user.route');
+const stackRouter = require('./app/routes/stackoverflow.route');
 const errorHandler = require('./app/api/middleware/errorHandler.middleware');
 const restoreTokenService = require('./app/api/services/restoreToken.service');
 const fs = require('fs');
@@ -20,14 +21,11 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error'));
 
-app.get('/', checkIfAuthenticated, function (req, res) {
-  res.status(200).json({ stackover: 'test', env: process.env.NODE_ENV });
-});
-
+app.use('/api/stack', checkIfAuthenticated, stackRouter, errorHandler.bind(null, ''));
 app.use('/api/user', userRouter, errorHandler.bind(null, 'User'));
 
-app.listen(3000, function () {
-  console.log('Node server listening on port 3000')
+app.listen(process.env.PORT, function () {
+  console.log(`Node server listening on port ${process.env.PORT}`)
 });
 
 // Clean expired restore password tokens

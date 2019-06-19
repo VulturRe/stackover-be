@@ -1,4 +1,4 @@
-function errorHandler(modelName, err, req, res, next) {
+function errorHandler(err, req, res, next) {
   console.log(err);
   switch (err.name) {
     case 'WrongParams': 
@@ -17,16 +17,16 @@ function errorHandler(modelName, err, req, res, next) {
   next();
 }
 
-function handleMongoErrors(modelName, err, req, res, next) {
+function handleMongoErrors(err, req, res, next) {
   switch(err.code) {
-    case 11000: {
-      const words = err.errmsg.split(' ');
-      const index = words.findIndex(el => el === 'index:') + 1;
-      const fieldName = words[index].split('_')[0];
-      const value = words[words.length - 2];
-      res.status(400).json({ name: 'DuplicateError', message: `${modelName} with ${fieldName}=${value} already exists!`});
-      break;
-    }
+    // case 11000: {
+    //   const words = err.errmsg.split(' ');
+    //   const index = words.findIndex(el => el === 'index:') + 1;
+    //   const fieldName = words[index].split('_')[0];
+    //   const value = words[words.length - 2];
+    //   res.status(400).json({ name: 'DuplicateError', message: `${modelName} with ${fieldName}=${value} already exists!`});
+    //   break;
+    // }
     default:
       res.status(500).json({ name: 'MongoError', message: err.errmsg });
       break;
