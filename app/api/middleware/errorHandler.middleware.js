@@ -8,7 +8,7 @@ function errorHandler(err, req, res, next) {
       handleMongoErrors(modelName, err.message, req, res, next);
       break;
     case 'ValidationError':
-      res.status(400).json({ name: 'ValidationError', message: err.message });
+      res.status(400).json(err);
       break;
     default:
       res.status(500).json(err);

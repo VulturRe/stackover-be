@@ -50,14 +50,7 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      if (!params.ids) {
-        throw {
-          name: 'ValidationError',
-          message: 'Ids can not be empty'
-        };
-      }
-
-      req.json(await stackoverService.userQuestions(id, params));
+      res.json(await stackoverService.userQuestions(id, params));
     } catch (err) {
       next(err);
     }
