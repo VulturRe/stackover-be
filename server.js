@@ -1,6 +1,7 @@
 const express = require('express');
 const expressJwt = require('express-jwt');
 const logger = require('morgan');
+const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('./app/config/database');
 const userRouter = require('./app/routes/user.route');
@@ -16,6 +17,10 @@ const checkIfAuthenticated = expressJwt({
   secret: RSA_PUBLIC_KEY,
   algorithms: ['RS256']
 });
+
+if (process.env.NODE_ENV === 'prod') {
+  app.use(express.static('static'));
+}
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
