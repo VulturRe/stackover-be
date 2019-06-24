@@ -99,8 +99,8 @@ class UserService {
   static async authenticate(login, password) {
     return UserService.findByLogin(login)
       .then(user => {
-        if (!user) throw { name: 'WrongParams', message: `Can not find user with login="${login}"` };
-        if (!bcrypt.compareSync(password, user.password)) throw { name: 'WrongParams', message: 'Invalid password' };
+        if (!user) throw { name: 'WrongParams', message: `Такого пользователя не существует` };
+        if (!bcrypt.compareSync(password, user.password)) throw { name: 'WrongParams', message: 'Неверный пароль' };
 
         const token = jwt.sign({}, RSA_PRIVATE_KEY, {
           algorithm: 'RS256',

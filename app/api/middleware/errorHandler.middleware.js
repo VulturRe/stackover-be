@@ -1,5 +1,5 @@
 function errorHandler(err, req, res, next) {
-  console.log(err);
+  console.log(err.name);
   switch (err.name) {
     case 'WrongParams': 
       res.status(400).send(err.message);

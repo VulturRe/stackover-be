@@ -21,8 +21,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error'));
 
-app.use('/api/stack', checkIfAuthenticated, stackRouter, errorHandler.bind(null, ''));
-app.use('/api/user', userRouter, errorHandler.bind(null, 'User'));
+app.use('/api/stack', checkIfAuthenticated, stackRouter, errorHandler);
+app.use('/api/user', userRouter, errorHandler);
 
 app.listen(process.env.PORT, function () {
   console.log(`Node server listening on port ${process.env.PORT}`)
