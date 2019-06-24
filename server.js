@@ -20,14 +20,23 @@ const checkIfAuthenticated = expressJwt({
 
 if (process.env.NODE_ENV === 'prod') {
   app.use(express.static('static'));
+  app.use('/login', express.static('static'));
+  app.use('/restore', express.static('static'));
+  app.use('/reset', express.static('static'));
+  app.use('/search', express.static('static'));
+  app.use('/register', express.static('static'));
+  app.use('/question/:questionId', express.static('static'));
 }
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error'));
+mongoose.connection.on('error', () => {
+  console.error('MongoDB connection error');
+  process.exit(1);
+});
 
-app.use('/api/stack', checkIfAuthenticated, stackRouter, errorHandler);
 app.use('/api/user', userRouter, errorHandler);
+app.use('/api/stack', checkIfAuthenticated, stackRouter, errorHandler);
 
 app.listen(process.env.PORT, function () {
   console.log(`Node server listening on port ${process.env.PORT}`)

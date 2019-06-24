@@ -79,11 +79,11 @@ class UserService {
 
     return UserService.findByLogin(user.login)
       .then(usr => {
-        if (usr) throw { name: 'WrongParams', message: `User with login="${user.login}" already exists` };
+        if (usr) throw { name: 'WrongParams', message: 'Пользователь с таким логином существует' };
       })
       .then(() => UserService.findByEmail(user.email))
       .then(usr => {
-        if (usr) throw { name: 'WrongParams', message: `User with email="${user.email}" already exists` };
+        if (usr) throw { name: 'WrongParams', message: 'Пользователь с таким e-mail существует' };
       })
       .then(() => {
         userDao.create(user, async (err, result) => {
@@ -114,7 +114,7 @@ class UserService {
   static async restoreBegin(login) {
     return UserService.findByLogin(login)
       .then(async user => {
-        if (!user) throw { name: 'WrongParams', message: `Can not find user with login="${login}"` };
+        if (!user) throw { name: 'WrongParams', message: 'Такого пользователя не существует' };
         let foundToken = await restoreTokenService.findByUserId(user.id);
         if (foundToken) {
           if (moment(foundToken.expiresAt).isBefore(moment())) {

@@ -1,5 +1,26 @@
 version: '3'
 services:
+  mongo:
+    container_name: mongo
+    build:
+      context: mongo/
+      dockerfile: Dockerfile
+    volumes:
+      - ".${MONGO_DATA_DIR}:${MONGO_DATA_DIR}"
+    ports:
+      - "27017:27017"
+    env_file:
+      - .env
+  mongo-express:
+    container_name: mongo_express
+    restart: always
+    image: mongo-express
+    ports:
+      - "8081:8081"
+    env_file:
+      - me.env
+    links:
+      - mongo
   stackover-be:
     container_name: stackover-be
     build:
@@ -16,14 +37,3 @@ services:
       - "${PORT}:${PORT}"
     links: 
       - mongo
-  mongo:
-    container_name: mongo
-    build:
-      context: mongo/
-      dockerfile: Dockerfile
-    volumes:
-      - ".${MONGO_DATA_DIR}:${MONGO_DATA_DIR}"
-    ports:
-      - "27017:27017"
-    env_file:
-      - .env
