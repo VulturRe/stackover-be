@@ -33,13 +33,6 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      if (!params.ids) {
-        throw {
-          name: 'ValidationError',
-          message: 'Ids can not be empty'
-        };
-      }
-
       res.json(await stackoverService.answers(id, params));
     } catch (err) {
       next(err);
@@ -51,6 +44,15 @@ module.exports = {
       const { id } = req.params;
 
       res.json(await stackoverService.userQuestions(id, params));
+    } catch (err) {
+      next(err);
+    }
+  },
+  question: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+
+      res.json(await stackoverService.question(id));
     } catch (err) {
       next(err);
     }
