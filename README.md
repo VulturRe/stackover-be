@@ -4,7 +4,8 @@ This project was created by NodeJS.
 
 ## Development server
 
-Run `npm run dev` for a dev api server.
+Run `npm run dev` for a dev api server. NOTE: run only after MongoDB starts.
+
 Run `docker-compose -f docker-compose.dev.yml` for MongoDB & MongoExpress instances.
 
 ## Build
